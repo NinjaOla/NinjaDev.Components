@@ -1,0 +1,21 @@
+﻿@typeparam TItem
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm @bind-Model="@Model" OnSubmit=@FormSubmitted>
+    <DataAnnotationsValidator />
+    @CreateComponents()
+    <ValidationSummary />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@{
+
+
+
+}
+
+
+
+@code{
+
+}
