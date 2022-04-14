@@ -56,9 +56,8 @@ namespace NinjaDev.Components.Blazor
                 editModel.PropertyInfo = propertyInfo;
                 editModel.Callback = Setter;
                 editModel.Expresseion = exp;
+                editModel.ComponentParameters = new Dictionary<string, object>();
 
-
-                yield return editModel;
                 if (propertyInfo.PropertyType.IsEnum)
                 {
                     //var instantValue = BindConverter.FormatValue(propertyValue);
@@ -72,23 +71,50 @@ namespace NinjaDev.Components.Blazor
                 switch (editModel.Type.Name)
                 {
                     case nameof(String):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<string>>(exp));
+                        editModel.ComponentParameters.Add("oninput", EventCallback.Factory.CreateBinder<string>(this, __value => { Setter(propertyInfo, __value); }, (string)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", (string)editModel.Value);
+                        editModel.ComponentType = typeof(InputText);
                         break;
                     case nameof(Boolean):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<bool>>(exp));
+                        editModel.ComponentParameters.Add("onchange", EventCallback.Factory.CreateBinder<bool>(this, __value => { Setter(propertyInfo, __value); }, (bool)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", (bool)editModel.Value);
+                        editModel.ComponentParameters.Add("checked", BindConverter.FormatValue((bool)editModel.Value));
+                        editModel.ComponentType = typeof(InputCheckbox);
                         break;
                     case nameof(Int64):
                     case nameof(UInt64):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<long>>(exp));
+                        editModel.ComponentParameters.Add("onchange", EventCallback.Factory.CreateBinder<long>(this, __value => { Setter(propertyInfo, __value); }, (long)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", editModel.Value);
+                        editModel.ComponentType = typeof(InputNumber<long>);
                         break;
                     case nameof(Int32):
                     case nameof(UInt32):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<int>>(exp));
+                        editModel.ComponentParameters.Add("onchange", EventCallback.Factory.CreateBinder<int>(this, __value => { Setter(propertyInfo, __value); }, (int)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", editModel.Value);
+                        editModel.ComponentType = typeof(InputNumber<int>);
                         break;
                     case nameof(Int16):
                     case nameof(UInt16):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<short>>(exp));
+                        editModel.ComponentParameters.Add("onchange", EventCallback.Factory.CreateBinder<short>(this, __value => { Setter(propertyInfo, __value); }, (short)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", editModel.Value);
+                        editModel.ComponentType = typeof(InputNumber<short>);
                         break;
                     case nameof(Double):
+                        editModel.ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<double>>(exp));
+                        editModel.ComponentParameters.Add("onchange", EventCallback.Factory.CreateBinder<double>(this, __value => { Setter(propertyInfo, __value); }, (double)editModel.Value));
+                        editModel.ComponentParameters.Add("Value", editModel.Value);
+                        editModel.ComponentType = typeof(InputNumber<double>);
                         break;
                     default:
                         break;
                 }
+
+                yield return editModel;
             }
         }
 
@@ -106,5 +132,7 @@ namespace NinjaDev.Components.Blazor
         public object Value { get; set; }
         public PropertyInfo PropertyInfo { get; internal set; }
         public System.Linq.Expressions.MemberExpression Expresseion { get; internal set; }
+        public Dictionary<string, object> ComponentParameters { get; set; }
+        public Type ComponentType { get; set; }
     }
 }

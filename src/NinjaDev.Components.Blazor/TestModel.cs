@@ -12,7 +12,8 @@ namespace NinjaDev.Components.Blazor
         [MaxLength(5)]
         public string Text { get; set; }
         public int Int { get; set; }
-        public bool Boolean { get; set; }
+        public long Longtest { get; set; }
+        public bool Boolean { get; set; } = true;
         public TestEnum Enum { get; set; } 
         public List<SubModel> List { get; set; }
     }
