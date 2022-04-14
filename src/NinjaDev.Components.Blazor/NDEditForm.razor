@@ -3,19 +3,37 @@
 
 <EditForm @bind-Model="@Model" OnSubmit=@FormSubmitted>
     <DataAnnotationsValidator />
-    @CreateComponents()
+    @{
+        foreach(var editProp in CreateComponents())
+        {
+            <div class="form-group">
+            <label>@editProp.LabelText</label>
+                @{
+                    switch (editProp.Type.Name)
+                    {
+                        case nameof(String):
+                            <InputText Value="@editProp.Value.ToString()" ValueExpression="System.Linq.Expressions.Expression.Lambda<Func<string>>(editProp.Expresseion)" @oninput="(e) =>{ editProp.Callback(editProp.PropertyInfo, e.Value.ToString());  }"></InputText>
+                            break;
+                        case nameof(Boolean):
+                            break;
+                        case nameof(Int64):
+                        case nameof(UInt64):
+                            break;
+                        case nameof(Int32):
+                        case nameof(UInt32):
+                            break;
+                        case nameof(Int16):
+                        case nameof(UInt16):
+                            break;
+                        case nameof(Double):
+                            break;
+                        default:
+                            break;
+                    };
+                }
+            </div>
+        }
+    }
     <ValidationSummary />
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
-
-@{
-
-
-
-}
-
-
-
-@code{
-
-}
