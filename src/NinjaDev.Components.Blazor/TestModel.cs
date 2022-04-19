@@ -22,6 +22,8 @@ namespace NinjaDev.Components.Blazor
     {
 
         public string SubName { get; set; }
+        public string SubName2 { get; set; }
+
 
     }
     public enum TestEnum { get,set,totally};

@@ -8,9 +8,7 @@ Welcome to your new app.
 
 
 <SurveyPrompt Title="How is Blazor working for you? ITS GREAT :)" />
-@*<EditForm Model=InputModel>
-    <InputText @bind-Value="InputModel.Text" @bind-Value:event="oninput" />
-</EditForm>*@
+
 
 <h3>@InputModel.Text</h3>
 
@@ -21,4 +19,6 @@ Welcome to your new app.
 @code {
     public NinjaDev.Components.Blazor.TestModel InputModel { get; set; } = new NinjaDev.Components.Blazor.TestModel() { Text = "123" };
 
+
+    public string TestString {get;set;}
 }

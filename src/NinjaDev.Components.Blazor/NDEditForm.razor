@@ -3,18 +3,12 @@
 
 <EditForm @bind-Model="@Model" OnSubmit=@FormSubmitted>
     <DataAnnotationsValidator />
-    @{
-        foreach(var editProp in CreateComponents())
-        {
-            <div class="form-group">
-            <label>@editProp.LabelText</label>
-                @if(editProp.ComponentType != null)
-                {
-                    <DynamicComponent Type=editProp.ComponentType Parameters=editProp.ComponentParameters />
-                }
-            </div>
-        }
-    }
+
+    <NDDynamicComponent T=TItem @bind-Model="@Model" ChangedCallback="(m) => {ModelChanged.InvokeAsync(m);}" />
     <ValidationSummary />
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
+@{
+
+
+}
