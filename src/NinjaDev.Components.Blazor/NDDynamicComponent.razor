@@ -1,0 +1,21 @@
+﻿@typeparam T
+@using Microsoft.AspNetCore.Components.Forms
+
+
+@foreach(var property in CreateComponents())
+{
+    @RenderDynamic(property)
+}
+
+@{
+
+
+    RenderFragment RenderDynamic(INDEditProperty property)
+    {
+
+        return 
+    @<DynamicComponent Type=property.ComponentType Parameters=property.ComponentParameters />;
+    
+    }
+}
+
