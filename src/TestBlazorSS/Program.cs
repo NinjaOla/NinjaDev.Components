@@ -1,13 +1,17 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using TestBlazorSS.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
 
 var app = builder.Build();
 
@@ -25,7 +29,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapBlazorHub();
+app.MapBlazorHub(); 
 app.MapFallbackToPage("/_Host");
 
 app.Run();
