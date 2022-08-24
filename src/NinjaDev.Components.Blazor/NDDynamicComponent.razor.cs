@@ -42,14 +42,15 @@ namespace NinjaDev.Components.Blazor
             var list = typeof(T).GetProperties();
             foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                //if(propertyInfo.PropertyType.IsArray)
-                //{
-                //    NDEditPropertyArray<IEnumerable<T>, T> nDEditPropertyArray = new NDEditPropertyArray<IEnumerable<T>,T>((IEnumerable<T>)Model, propertyInfo, this, true);
-                //    //nDEditPropertyArray.SetComponentInfo();
 
-                //    yield return nDEditPropertyArray;
+                if (propertyInfo.PropertyType.IsArray)
+                {
+                    ICanSetComponentInfo variable = CreateEditPropertyArray(propertyInfo);
+                    variable.SetComponentInfo();
+                    yield return variable as INDEditProperty;
 
-                //} else if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition().GetInterfaces().Any(i => i.Name == nameof(IList)))
+                }
+                //else if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition().GetInterfaces().Any(i => i.Name == nameof(IList)))
                 //{
                 //    NDEditPropertyArray<IEnumerable<T>, T> nDEditPropertyArray = new NDEditPropertyArray<IEnumerable<T>, T>((IEnumerable<T>)Model, propertyInfo, this, false);
                 //    //nDEditPropertyArray.SetComponentInfo();
@@ -111,6 +112,13 @@ namespace NinjaDev.Components.Blazor
             return typeof(NDEditPropertyEnum<,>)
                 .CreateType(new Type[] { typeof(T), propertyInfo.PropertyType })
                 .CreateInstance(new object[] { Model, propertyInfo, this }) as ICanSetComponentInfo;
+        }
+
+        ICanSetComponentInfo CreateEditPropertyArray(PropertyInfo propertyInfo, bool isRenderSublist = false)
+        {
+            return typeof(NDEditPropertyArray<,,>)
+                .CreateType(new Type[] { typeof(T), propertyInfo.PropertyType, propertyInfo.PropertyType.FindElementType()})
+                .CreateInstance(new object[] { Model, propertyInfo.GetValue(Model),  propertyInfo, this, isRenderSublist }) as ICanSetComponentInfo;
         }
     }
    

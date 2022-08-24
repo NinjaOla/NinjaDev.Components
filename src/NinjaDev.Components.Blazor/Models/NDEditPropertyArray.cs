@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace NinjaDev.Components.Blazor.Models
 {
-    internal class NDEditPropertyArray<TList, TModel> : NDEditPropertyBase<TList>, INDEditProperty
-        where TList : IEnumerable<TModel>
+    internal class NDEditPropertyArray<TModel, TList, TListValue> : NDEditPropertyBase<TModel>, INDEditProperty, ICanSetComponentInfo
+        where TList : IEnumerable<TListValue>
     {
         protected bool _renderSubList;
-        protected  IChangeModel<TModel> Parent { get; }
+        protected IChangeModel<TModel> Parent { get; }
+        public TList InputList { get; }
 
         /// <summary>
         /// 
@@ -22,29 +23,29 @@ namespace NinjaDev.Components.Blazor.Models
         /// <param name="propertyInfo"></param>
         /// <param name="parent"></param>
         /// <param name="renderSubList">Render the sublist if any exists</param>
-        public NDEditPropertyArray(TList model, PropertyInfo propertyInfo, IChangeModel<TModel> parent, bool renderSubList = false) : base(model, propertyInfo)
+        public NDEditPropertyArray(TModel model, TList inputList, PropertyInfo propertyInfo, IChangeModel<TModel> parent, bool renderSubList = false) : base(model, propertyInfo)
         {
             _renderSubList = renderSubList;
             Parent = parent;
+            InputList = inputList;
         }
 
-        /*public void SetComponentInfo<TComponent>()
-            where TComponent : ComponentBase
+        public void SetComponentInfo()
         {
 
 
 
-            ComponentParameters.Add("Value", CreateSingleFragment(CreateSelectOptions()));
+            //ComponentParameters.Add("Value", CreateSingleFragment(CreateSelectOptions()));
 
-            ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<TModel>>(Expression));
-            ComponentParameters.Add("ValueChanged", CreateEventCallback<TModel>());
+            //ComponentParameters.Add("ValueExpression", System.Linq.Expressions.Expression.Lambda<Func<TModel>>(Expression));
+            //ComponentParameters.Add("ValueChanged", CreateEventCallback<TModel>());
 
-            if()
+            //if ()
 
-            ComponentParameters.Add("ChildContent", CreateSingleFragment(CreateSelectOptions()));
+            //    ComponentParameters.Add("ChildContent", CreateSingleFragment(CreateSelectOptions()));
 
-            ComponentType = typeof(InputSelect<TEnum>);
-        }*/
+            //ComponentType = typeof(InputSelect<TEnum>);
+        }
 
 
         /// <summary>
@@ -65,8 +66,9 @@ namespace NinjaDev.Components.Blazor.Models
             return fragments;
         }*/
 
-        private RenderFragment CreateSelectOption(object value, string displayText) => builder =>
+        private RenderFragment CreateSelectOptions(object value, string displayText) => builder =>
         {
+            builder.OpenComponent(0, typeof(InputText));
             builder.OpenElement(0, "option");
             builder.AddAttribute(1, "value", value);
             builder.AddContent(2, displayText);
@@ -76,7 +78,6 @@ namespace NinjaDev.Components.Blazor.Models
         {
 
             return EventCallback.Factory.Create<TValue>(this, (e) => {
-
                 Value = e;
             });
 
@@ -84,11 +85,30 @@ namespace NinjaDev.Components.Blazor.Models
 
         public override void OnChange()
         {
-            foreach(var model in _model)
-            {
-                Parent?.OnChangeModel(model);
-            }
+
         }
+
+        public override RenderFragment Render() => builder  => {
+            var buttonCb = EventCallback.Factory.Create(this, (ee) =>
+            {
+                var x = "";
+            });
+            foreach (var item in InputList)
+            {
+                builder.OpenElement(0, "p");
+                builder.AddContent(1, item.ToString());
+                builder.CloseElement();
+            }
+            builder.OpenElement(55, "button");
+            builder.AddAttribute(56, "onclick", buttonCb);
+            builder.AddAttribute(57, "type", "button");
+            builder.AddAttribute(58, "class", "btn btn-primary");
+            builder.AddContent(59, "Add new item");
+
+            builder.CloseElement();
+
+        };
+
     }
 
     class ListFragment : ListFragment<ListFragment>

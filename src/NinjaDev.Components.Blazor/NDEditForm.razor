@@ -3,7 +3,6 @@
 
 <EditForm @bind-Model="@Model" OnSubmit=@FormSubmitted>
     <DataAnnotationsValidator />
-
     <NDDynamicComponent T=TItem @bind-Model="@Model" ChangedCallback="(m) => {ModelChanged.InvokeAsync(m);}" />
     <ValidationSummary />
     <button type="submit" class="btn btn-primary">Submit</button>

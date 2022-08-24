@@ -15,6 +15,9 @@ namespace NinjaDev.Components.Blazor
         public long Longtest { get; set; }
         public bool Boolean { get; set; } = true;
         public TestEnum Enum { get; set; } 
+
+        public string[] StringArray { get; set; } = new string[] { "test1","test2"};
+        List<string> ListString { get; set; }
         public List<SubModel> List { get; set; }
     }
 

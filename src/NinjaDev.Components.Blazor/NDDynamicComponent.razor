@@ -13,9 +13,12 @@
 
     RenderFragment RenderDynamic(INDEditProperty property)
     {
-
+        if(property.ComponentType == null)
+        {
+            return property.Render();
+        }
         return 
-    @<DynamicComponent Type=property.ComponentType Parameters=property.ComponentParameters />;
+        @<DynamicComponent Type=property.ComponentType Parameters=property.ComponentParameters />;
     
     }
 }

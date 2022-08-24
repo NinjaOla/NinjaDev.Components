@@ -94,5 +94,10 @@ namespace NinjaDev.Components.Blazor.Models
                 fragment(builder);
             }
         };
+
+        public virtual RenderFragment Render() => builder =>
+        {
+
+        };
     }
 }
